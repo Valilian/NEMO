@@ -477,7 +477,7 @@ def user_preferences(request):
 def view_user(request, user_id):
 
     user = get_object_or_404(User, pk=user_id)
-    if UserCustomization.get_bool("user_allow_profile_view") or user.is_staff:
+    if user.is_staff:
         return create_or_modify_user(request, user_id)
     if request.user.id != user_id:
         return HttpResponseBadRequest("Cannot view/modify another user")
