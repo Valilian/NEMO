@@ -90,4 +90,5 @@ def base_context(request):
         "status_dashboard_page_title": customization_values.get("status_dashboard_page_title", "Status dashboard"),
         "requests_page_title": customization_values.get("requests_page_title", "Requests"),
         "safety_page_title": customization_values.get("safety_page_title", "Safety"),
+        "allow_profile_view": customization_values.get("user_allow_profile_view", "") == "enabled",
     }
