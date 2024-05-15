@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load custom_tags_and_filters %}
 {% load mptt_tags %}
-{% block title %}Modify user{% endblock %}
+{% block title %}View user{% endblock %}
 {% block content %}
     <div class="row col-sm-12">
     {% if form.errors %}
@@ -18,7 +18,7 @@
     </div>
 	<form id="view_user_form" class="form-horizontal" enctype="multipart/form-data" method="post" action="{% url 'view_user' form.instance.id %}">
 		{% csrf_token %}
-
+		{% block basic_info %}
 		<div class="panel panel-default">
 			<div class="panel-body">
 				<h3 id="basic_info_label">Basic Information</h3>
@@ -33,7 +33,8 @@
 				</ul>
 			</div>
 		</div>
-
+		{% endblock %}
+		{% block projects %}
 		<div class="panel panel-default">
 			<div class="panel-body">
 				<h3 id="projects_label">Projects</h3>
@@ -42,7 +43,8 @@
 				</div>
 			</div>
 		</div>
-
+		{% endblock %}
+		{% block tool_qualifications %}
 		<div class="panel panel-default">
 			<div class="panel-body">
 				<h3 id="tool_qualifications_label">Tool Qualifications</h3>
@@ -57,7 +59,8 @@
 				{% endif %}
 			</div>
 		</div>
-
+		{% endblock %}
+		{% block groups %}
 		<div class="panel panel-default">
 			<div class="panel-body">
 				<h3 id="groups_label">Groups</h3>
@@ -72,7 +75,7 @@
 				{% endif %}
 			</div>
 		</div>
-
+		{% endblock %}
         {% button type="save" value="Save changes" %}
 	</form>
 {% endblock %}
