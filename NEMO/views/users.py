@@ -14,7 +14,7 @@ from django.utils import timezone
 from django.views.decorators.http import require_GET, require_POST, require_http_methods
 
 from NEMO.decorators import any_staff_required, user_office_or_manager_required
-from NEMO.forms import UserForm, UserPreferencesForm
+from NEMO.forms import UserForm, UserPreferencesForm, UserProjectForm
 from NEMO.models import (
     ActivityHistory,
     Area,
@@ -480,6 +480,31 @@ def user_preferences(request):
     }
     return render(request, "users/preferences.html", dictionary)
 
+
+@login_required
+@require_http_methods(['GET', 'POST'])
+def view_user(request, user_id):
+
+    user = get_object_or_404(User, pk=user_id)
+    if user.is_staff:
+        return create_or_modify_user(request, user_id)
+    if request.user.id != user_id:
+        return HttpResponseBadRequest("Cannot view/modify another user")
+
+    dictionary = {
+        "user": user,
+        "projects": Project.objects.filter(active=True, account__active=True),
+        "tool_qualifications": user.qualifications.all(),
+        "groups": user.groups.all(),
+    }
+
+    if request.method == "GET":
+        form = UserProjectForm(instance=user)
+        dictionary["form"] = form
+        return render(request, "users/view_user.html", dictionary)
+    else:
+        return HttpResponseBadRequest("Invalid method")
+        
 
 def readonly_users(request):
     # Only user office and facility managers can edit user information
